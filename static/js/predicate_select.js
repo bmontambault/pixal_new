@@ -60,11 +60,12 @@ class PredicateSelect {
         var id = document.createElement('div')
         id.innerHTML = 'ID: ' + option
         var features = document.createElement('div')
+        features.className = "feature-list"
         features.innerHTML = 'Features: ' + this.options_features[option]
         var size = document.createElement('div')
         size.innerHTML = 'Size: ' + this.options_index[option].length
         name.appendChild(id)
-        name.appendChild(features)
+        //name.appendChild(features)
         name.appendChild(size)
 
         select_button.appendChild(name)

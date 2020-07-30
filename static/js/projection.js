@@ -58,13 +58,10 @@ class Projection {
           .attr("id", function(d) { return "point-"+d.index }.bind(this))
           .attr("class", "dot")
           .attr("class", "projection-point")
+          .attr("fill", "gray")
           .attr("r", 3.5)
           .attr("cx", function(d) { return this.x(d.x); }.bind(this))
           .attr("cy", function(d) { return this.y(d.y); }.bind(this))
           .style("opacity", .7)
-    }
-
-    update_color(){
-
     }
 }

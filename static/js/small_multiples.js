@@ -92,7 +92,7 @@ class ContinuousSM extends SmallMultiple {
 
     make_scatter(svg, data, x_field, y_field){
         var color = d3.scaleLinear().domain([0, 1])
-                        .range(["#5dade2", "#ec7063"])
+                        .range(["gray", "#ec7063"])
         svg.selectAll(".dot")
           .data(data)
         .enter().append("circle")
