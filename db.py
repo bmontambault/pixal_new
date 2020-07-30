@@ -2,11 +2,11 @@ from sqlalchemy import create_engine
 import pandas as pd
 import numpy as np
 
-def get_predicate_data(models, predicate, connect_string, table):
+def get_predicate_data(model, predicate, connect_string, table):
     engine = create_engine(connect_string)
     predicate_data = []
     for feature in predicate.feature_values.keys():
-        features_str = ','.join([col.lower() for col in models + [feature]])
+        features_str = f'{model},{feature}'
         where = predicate.query(exclude=feature)
         if where == "":
             query = f"select {features_str} from {table}"
@@ -14,8 +14,7 @@ def get_predicate_data(models, predicate, connect_string, table):
             query = f"select {features_str} from {table} where {where}"
         df = pd.read_sql(query, engine)
         df['anomaly'] = 1 - predicate.contains(df, features=[feature])
-        for model in models:
-            predicate_data.append({'x': feature, 'y': model.lower(), 'data': df[[feature, model.lower(), 'anomaly']].to_dict('records')})
+        predicate_data.append({'x': feature, 'y': model.lower(), 'data': df[[feature, model.lower(), 'anomaly']].to_dict('records')})
 
     return predicate_data
 

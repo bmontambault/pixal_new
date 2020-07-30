@@ -28,8 +28,15 @@ def get_predicates():
     features = request_data['features']
     specificity = request_data['specificity']
 
-    predicates = [Predicate({'radius_mean': [.4, .5]}, {'radius_mean': 'continuous'})]
-    predicate_data = [a for b in [get_predicate_data(models, predicate, connect_string, table) for predicate in predicates] for a in b]
+    predicates = [{'predicate': Predicate({'radius_mean': [.4, .5], 'radius_se': [.2, .3]},
+                                          {'radius_mean': 'continuous', 'radius_se': 'continuous'}),
+                   'model': 'RobustCov'},
+                  {'predicate': Predicate({'texture_mean': [.7, .8], 'texture_se': [.4, .5]},
+                                          {'texture_mean': 'continuous', 'texture_se': 'continuous'}),
+                   'model': 'LOF'}
+                  ]
+    predicate_data = [get_predicate_data(predicate['model'], predicate['predicate'], connect_string, table) for predicate in predicates]
+    predicate_data = dict(zip(range(len(predicate_data)), predicate_data))
     return json.dumps(predicate_data)
 
 if __name__ == "__main__":

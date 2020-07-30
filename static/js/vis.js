@@ -35,17 +35,35 @@ class Vis {
         var plots = document.getElementById("small-multiples")
 
         this.get_predicates(models, features, specificity).then(function(predicates){
-            predicates.forEach(function(predicate){
-                var feature_type = feature_types[predicate.x]
-                if (feature_type == 'continuous'){
-                    var plot = new ContinuousSM(width, height, predicate.data, predicate.x, predicate.y, this)
-                } else if (feature_type == 'discrete'){
-                    var plot = new ContinuousSM(width, height, predicate.data, predicate.x, predicate.y, this)
-                }
-                plots.appendChild(plot.plot_container)
-            }.bind(this))
+            for (var predicate_num in predicates){
+                var predicate_group = document.createElement('div')
+                predicate_group.id = "predicate-group-" + predicate_num
+                predicate_group.className = "row border"
+                var predicate_plots = predicates[predicate_num]
+                predicate_plots.forEach(function(predicate_plot){
+                    var feature_type = feature_types[predicate_plot.x]
+                    if (feature_type == 'continuous'){
+                        var plot = new ContinuousSM(width, height, predicate_plot.data, predicate_plot.x, predicate_plot.y, this)
+                    } else if (feature_type == 'discrete'){
+                        var plot = new ContinuousSM(width, height, predicate_plot.data, predicate_plot.x, predicate_plot.y, this)
+                    }
+                    predicate_group.appendChild(plot.plot_container)
+                }.bind(this))
+                plots.appendChild(predicate_group)
+            }
         }.bind(this))
     }
+//            predicates.forEach(function(predicate){
+//                var feature_type = feature_types[predicate.x]
+//                if (feature_type == 'continuous'){
+//                    var plot = new ContinuousSM(width, height, predicate.data, predicate.x, predicate.y, this)
+//                } else if (feature_type == 'discrete'){
+//                    var plot = new ContinuousSM(width, height, predicate.data, predicate.x, predicate.y, this)
+//                }
+//                plots.appendChild(plot.plot_container)
+//            }.bind(this))
+//        }.bind(this))
+//    }
 
 //    plot_predicate(predicate, y_field, max_small_multiples){
 //        var width = (this.content_width-8) / max_small_multiples

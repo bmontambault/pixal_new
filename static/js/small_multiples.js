@@ -100,7 +100,7 @@ class ContinuousSM extends SmallMultiple {
           .attr("r", 3.5)
           .attr("cx", function(d) { return this.x(d[x_field]); }.bind(this))
           .attr("cy", function(d) { return this.y(d[y_field]); }.bind(this))
-          .style("fill", function(d) { console.log(d.anomaly); return color(d.anomaly); })
+          .style("fill", function(d) { return color(d.anomaly); })
           .style("opacity", .7)
     }
 
