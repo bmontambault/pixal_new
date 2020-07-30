@@ -1,9 +1,10 @@
 class PredicateSelect {
-    constructor(div_id, options, options_index, vis) {
+    constructor(div_id, options, options_index, options_features, vis) {
         this.div_id = div_id
         this.div = document.getElementById(this.div_id)
         this.options = options
         this.options_index = options_index
+        this.options_features = options_features
         this.vis = vis
         this.selected = null
         this.make_options(this.div_id, this.div, this.options)
@@ -53,7 +54,20 @@ class PredicateSelect {
 
         var select_button = document.createElement('button')
         select_button.id = option
-        select_button.innerHTML = option
+        var size = this.options_index[option].length
+
+        var name = document.createElement('div')
+        var id = document.createElement('div')
+        id.innerHTML = 'ID: ' + option
+        var features = document.createElement('div')
+        features.innerHTML = 'Features: ' + this.options_features[option]
+        var size = document.createElement('div')
+        size.innerHTML = 'Size: ' + this.options_index[option].length
+        name.appendChild(id)
+        name.appendChild(features)
+        name.appendChild(size)
+
+        select_button.appendChild(name)
         select_button.style.textAlign = "left"
         select_button.className = "btn btn-block feature-button " + this.div_id
         select_button.className += " border-right"

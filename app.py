@@ -33,15 +33,16 @@ def get_predicates():
                                           {'radius_mean': 'continuous', 'radius_se': 'continuous'},
                                           index=[0, 1, 2, 3]),
                    'model': 'RobustCov'},
-                  {'predicate': Predicate({'texture_mean': [.7, .8], 'texture_se': [.4, .5]},
-                                          {'texture_mean': 'continuous', 'texture_se': 'continuous'},
-                                          index=[5, 6, 7, 8]),
+                  {'predicate': Predicate({'texture_mean': [.7, .8], 'texture_se': [.4, .5], 'smoothness_mean': [.2, .3]},
+                                          {'texture_mean': 'continuous', 'texture_se': 'continuous', 'smoothness_mean': 'continuous'},
+                                          index=[5, 6, 7, 8, 100, 110, 120]),
                    'model': 'LOF'}
                   ]
     predicate_index = {i: predicates[i]['predicate'].index for i in range(len(predicates))}
+    predicate_features = {i: list(predicates[i]['predicate'].feature_values.keys()) for i in range(len(predicates))}
     predicate_data = [get_predicate_data(predicate['model'], predicate['predicate'], connect_string, table) for predicate in predicates]
     predicate_data = dict(zip(range(len(predicate_data)), predicate_data))
-    return json.dumps({'predicate_data': predicate_data, 'predicate_index': predicate_index})
+    return json.dumps({'predicate_data': predicate_data, 'predicate_index': predicate_index, 'predicate_features': predicate_features})
 
 if __name__ == "__main__":
     app.run(debug=True)

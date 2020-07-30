@@ -53,9 +53,9 @@ class Vis {
         }
     }
 
-    make_predicates(predicate_index){
+    make_predicates(predicate_index, predicate_features){
         var options = Object.keys(predicate_index)
-        var predicate_select = new PredicateSelect("predicates", options, predicate_index, this)
+        var predicate_select = new PredicateSelect("predicates", options, predicate_index, predicate_features, this)
     }
 
     run(){
@@ -66,8 +66,9 @@ class Vis {
         this.get_predicates(models, features, specificity).then(function(predicates){
             var predicate_data = predicates['predicate_data']
             var predicate_index = predicates['predicate_index']
+            var predicate_features = predicates['predicate_features']
             this.plot_predicates(predicate_data)
-            this.make_predicates(predicate_index)
+            this.make_predicates(predicate_index, predicate_features)
         }.bind(this))
     }
 }
