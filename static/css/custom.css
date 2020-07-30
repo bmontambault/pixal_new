@@ -1,3 +1,9 @@
 .selected-predicate {
   border:1px solid coral
 }
+
+.selected-point {
+  fill-opacity: 1;
+  stroke: red;
+  stroke-width: 5px;
+}

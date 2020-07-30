@@ -1,8 +1,9 @@
 class PredicateSelect {
-    constructor(div_id, options, vis) {
+    constructor(div_id, options, options_index, vis) {
         this.div_id = div_id
         this.div = document.getElementById(this.div_id)
         this.options = options
+        this.options_index = options_index
         this.vis = vis
         this.selected = null
         this.make_options(this.div_id, this.div, this.options)
@@ -19,8 +20,14 @@ class PredicateSelect {
             this.selected = option
         }
         if (this.selected != null){
+            var index = this.options_index[this.selected]
+            console.log(index)
             $(".predicate-group").hide()
             $("#predicate-group-" + this.selected).show()
+            $(".projection-point").removeClass("selected-point")
+            for (var i in index){
+                $("#point-" + index[i]).addClass("selected-point")
+            }
 
         }
     }

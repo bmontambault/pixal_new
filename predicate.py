@@ -3,9 +3,10 @@ import pandas as pd
 
 class Predicate(object):
 
-    def __init__(self, feature_values, feature_dtypes):
+    def __init__(self, feature_values, feature_dtypes, index):
         self.feature_values = feature_values
         self.feature_dtypes = feature_dtypes
+        self.index=index
 
     def contains(self, df, features=None):
         does_contain = np.ones(shape=df.shape[0])

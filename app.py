@@ -5,7 +5,7 @@ import pandas as pd
 import pickle
 
 from predicate import Predicate
-from db import get_feature_dtypes, get_predicate_data
+from db import get_feature_dtypes, get_projection, get_predicate_data
 
 connect_string = 'postgresql://bmontambault@localhost:5432/pixal'
 table = 'breast_cancer'
@@ -19,7 +19,8 @@ path = os.path.dirname(os.path.realpath(__file__))
 def index():
     feature_dtypes = get_feature_dtypes(connect_string, table)
     features = list(feature_dtypes.keys())
-    return render_template('index.html', features=features, feature_dtypes=feature_dtypes)
+    projection = get_projection(connect_string, table)
+    return render_template('index.html', features=features, feature_dtypes=feature_dtypes, projection=projection)
 
 @app.route('/get_predicates', methods=['GET', 'POST'])
 def get_predicates():
@@ -29,15 +30,18 @@ def get_predicates():
     specificity = request_data['specificity']
 
     predicates = [{'predicate': Predicate({'radius_mean': [.4, .5], 'radius_se': [.2, .3]},
-                                          {'radius_mean': 'continuous', 'radius_se': 'continuous'}),
+                                          {'radius_mean': 'continuous', 'radius_se': 'continuous'},
+                                          index=[0, 1, 2, 3]),
                    'model': 'RobustCov'},
                   {'predicate': Predicate({'texture_mean': [.7, .8], 'texture_se': [.4, .5]},
-                                          {'texture_mean': 'continuous', 'texture_se': 'continuous'}),
+                                          {'texture_mean': 'continuous', 'texture_se': 'continuous'},
+                                          index=[5, 6, 7, 8]),
                    'model': 'LOF'}
                   ]
+    predicate_index = {i: predicates[i]['predicate'].index for i in range(len(predicates))}
     predicate_data = [get_predicate_data(predicate['model'], predicate['predicate'], connect_string, table) for predicate in predicates]
     predicate_data = dict(zip(range(len(predicate_data)), predicate_data))
-    return json.dumps(predicate_data)
+    return json.dumps({'predicate_data': predicate_data, 'predicate_index': predicate_index})
 
 if __name__ == "__main__":
     app.run(debug=True)

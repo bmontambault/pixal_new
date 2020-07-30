@@ -30,12 +30,12 @@
                     <input type="range" min="0" max="1000" value="500" class="slider" id="slider-range">
                 </div>
                 <div id="run">
-                    <button id="run-button" type="button" class="btn btn-outline-success">Run</button>
+                    <button id="run-button" type="button" class="btn btn-outline-success">Get Predicates</button>
                 </div>
                 <div id="predicates">Predicates</div>
             </div>
             <div id="content" class="col-10 border">
-                <div id="scatter"></div>
+                <div id="projection"></div>
                 <div id="small-multiples"></div>
             </div>
         </div>
@@ -55,12 +55,14 @@
     <script src="../static/js/options.js"></script>
     <script src="../static/js/small_multiples.js"></script>
     <script src="../static/js/predicate_select.js"></script>
+    <script src="../static/js/projection.js"></script>
     <script src="../static/js/vis.js"></script>
     <script>
 
         var features = {{features|safe}}
         var feature_types = {{feature_dtypes|safe}}
-        var vis = new Vis(["RobustCov", "IsoForest", "LOF"], features, feature_types, 3)
+        var projection = {{projection|safe}}
+        var vis = new Vis(["RobustCov", "IsoForest", "LOF"], features, feature_types, projection, 4)
 
     </script>
 
