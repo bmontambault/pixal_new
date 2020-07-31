@@ -46,6 +46,8 @@ class Vis {
                     var plot = new ContinuousSM(this.sm_width, this.sm_height, predicate_plot.data, predicate_plot.x, predicate_plot.y, this)
                 } else if (feature_type == 'discrete'){
                     var plot = new ContinuousSM(this.sm_width, this.sm_height, predicate_plot.data, predicate_plot.x, predicate_plot.y, this)
+                } else if (feature_type == 'date'){
+                    var plot = new DateSM(this.sm_width, this.sm_height, predicate_plot.data, predicate_plot.x, predicate_plot.y, this)
                 }
                 predicate_group.appendChild(plot.plot_container)
             }.bind(this))

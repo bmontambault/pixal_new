@@ -8,8 +8,8 @@ class SmallMultiple {
         this.vis = vis
         this.filtered = false
 
-        this.parseTime = d3.timeParse("%Y-%m-%d")
-        this.formatTime = d3.timeFormat("%Y-%m-%d")
+        this.parseTime = d3.timeParse("%Y-%m-%d %H:%M:%S")
+        this.formatTime = d3.timeFormat("%Y-%m-%d %H:%M:%S")
 
         this.plot_margin = 10
         this.svg_margin = {top: 50, right: 50, bottom: 50, left: 50}
@@ -82,6 +82,48 @@ class ContinuousSM extends SmallMultiple {
 
     get_scale(data, x_field, y_field){
         var x = d3.scaleLinear()
+                .range([0, this.svg_width])
+                .domain(d3.extent(data, function(d) {return d[x_field]}))
+        var y = d3.scaleLinear()
+                .range([this.svg_height, 0])
+                .domain(d3.extent(data, function(d) {return d[y_field]}))
+        return [x, y]
+    }
+
+    make_scatter(svg, data, x_field, y_field){
+        var color = d3.scaleLinear().domain([0, 1])
+                        .range(["gray", "#ec7063"])
+        svg.selectAll(".dot")
+          .data(data)
+        .enter().append("circle")
+          .attr("class", "dot")
+          .attr("r", 3.5)
+          .attr("cx", function(d) { return this.x(d[x_field]); }.bind(this))
+          .attr("cy", function(d) { return this.y(d[y_field]); }.bind(this))
+          .style("fill", function(d) { return color(d.anomaly); })
+          .style("opacity", .7)
+    }
+
+}
+
+class DateSM extends SmallMultiple {
+    constructor(width, height, data, x_field, y_field, vis) {
+        super(width, height, data, x_field, y_field, vis)
+        this.data.forEach(function(d){
+            d[x_field] = this.parseTime(d[x_field].split('.')[0])
+        }.bind(this))
+        console.log(this.data)
+
+        var xy = this.get_scale(this.data, this.x_field, this.y_field)
+        this.x = xy[0]
+        this.y = xy[1]
+        this.x_axis = this.make_x_axis(this.svg, this.x)
+        this.y_axis = this.make_y_axis(this.svg, this.y)
+        this.make_scatter(this.svg, this.data, this.x_field, this.y_field)
+    }
+
+    get_scale(data, x_field, y_field){
+        var x = d3.scaleTime()
                 .range([0, this.svg_width])
                 .domain(d3.extent(data, function(d) {return d[x_field]}))
         var y = d3.scaleLinear()
