@@ -19,6 +19,8 @@ class Predicate(object):
                 does_contain *= ((df[k] >= v[0]) & (df[k] <= v[1])).astype(int)
             elif dtype == "discrete":
                 does_contain *= np.in1d(df[k], v).astype(int)
+            elif dtype == 'date':
+                does_contain *= ((df[k] >= v[0]) & (df[k] <= v[1])).astype(int)
         return does_contain
 
     def cont_query(self, feature, values):
@@ -30,15 +32,21 @@ class Predicate(object):
         else:
             return f"{feature} in {tuple(values)}"
 
+    def date_query(self, feature, values):
+        return f"({feature} >= '{values[0]}' and {feature} <= '{values[1]}')"
+
     def feature_query(self, feature, values, dtype):
         if dtype == "continuous":
             return self.cont_query(feature, values)
         elif dtype == "discrete":
             return self.disc_query(feature, values)
+        elif dtype == "date":
+            return self.date_query(feature, values)
 
     def query(self, exclude=[]):
         q = []
         for feature, values in self.feature_values.items():
             if feature not in exclude:
                 q.append(self.feature_query(feature, values, self.feature_dtypes[feature]))
+        print(q)
         return " and ".join(q)

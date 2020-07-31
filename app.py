@@ -181,10 +181,9 @@ def get_predicates():
     #                'model': 'LOF'}
     #               ]
     predicates = [{'predicate': Predicate({'temperature': [120, 123]}, {'temperature': 'continuous'}, index=p1_index), 'model': 'IsoForest'},
-                  {'predicate': Predicate({'voltage': [2.27556, 2.34751]}, {'voltage': 'continuous'}, index=p1_index), 'model': 'IsoForest'},
-                  {'predicate': Predicate({'temperature': [-40, -20]}, {'temperature': 'continuous'}, index=p2_index), 'model': 'IsoForest'},
-                  # {'predicate': Predicate({'voltage': [, ]}, {'dtime': 'date'}, index=p1_index), 'model': 'RobustCov'},
-                  {'predicate': Predicate({'dtime': ['2004-03-02 08:00:00', '2004-03-02 15:00:00']}, {'dtime': 'date', 'moteid': 'discrete'}, index=p1_index), 'model': 'RobustCov'}]
+                  {'predicate': Predicate({'voltage': [2.27556, 2.34751]}, {'voltage': 'continuous'}, index=p1_index), 'model': 'LOF'},
+                  {'predicate': Predicate({'temperature': [-40, -20]}, {'temperature': 'continuous'}, index=p2_index), 'model': 'RobustCov'},
+                  {'predicate': Predicate({'dtime': ['2004-03-02 08:00:00', '2004-03-02 15:00:00'], 'moteid': [15]}, {'dtime': 'date', 'moteid': 'discrete'}, index=p1_index), 'model': 'RobustCov'}]
     predicate_index = {i: predicates[i]['predicate'].index for i in range(len(predicates))}
     predicate_features = {i: list(predicates[i]['predicate'].feature_values.keys()) for i in range(len(predicates))}
     predicate_data = [get_predicate_data(predicate['model'], predicate['predicate'], connect_string, table) for predicate in predicates]

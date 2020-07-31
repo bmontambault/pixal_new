@@ -67,6 +67,28 @@ class SmallMultiple {
           .call(d3.axisLeft(y));
         return y_axis
     }
+
+    make_x_label(svg, x_field){
+        console.log('make_x_label')
+        var x_label = svg.append("text")
+          .attr("transform",
+                "translate(" + (this.svg_width/2) + " ," +
+                               (this.svg_height + this.svg_margin.top -5) + ")")
+          .style("text-anchor", "middle")
+          .text(x_field);
+        return x_label
+    }
+
+    make_y_label(svg, y_field){
+        var y_label = svg.append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 0 - this.svg_margin.left)
+          .attr("x",0 - (this.svg_height / 2))
+          .attr("dy", "1em")
+          .style("text-anchor", "middle")
+          .text(y_field);
+        return y_label
+    }
 }
 
 class ContinuousSM extends SmallMultiple {
@@ -77,6 +99,8 @@ class ContinuousSM extends SmallMultiple {
         this.y = xy[1]
         this.x_axis = this.make_x_axis(this.svg, this.x)
         this.y_axis = this.make_y_axis(this.svg, this.y)
+        this.x_label = this.make_x_label(this.svg, this.x_field)
+        this.y_label = this.make_y_label(this.svg, this.y_field)
         this.make_scatter(this.svg, this.data, this.x_field, this.y_field)
     }
 
@@ -119,6 +143,8 @@ class DateSM extends SmallMultiple {
         this.y = xy[1]
         this.x_axis = this.make_x_axis(this.svg, this.x)
         this.y_axis = this.make_y_axis(this.svg, this.y)
+        this.x_label = this.make_x_label(this.svg, this.x_field)
+        this.y_label = this.make_y_label(this.svg, this.y_field)
         this.make_scatter(this.svg, this.data, this.x_field, this.y_field)
     }
 

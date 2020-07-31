@@ -44,7 +44,7 @@ class RobustCov(Model):
         c = self.cov[data.columns].loc[data.columns].values
         x = data.values
         logp = st.multivariate_normal(m, c, allow_singular=True).logpdf(x)
-        return logp
+        return -logp/1000
 
 class LOF(Model):
 
@@ -63,5 +63,5 @@ class IsoForest(Model):
         self.model.fit(data)
 
     def score(self, data):
-        score = self.model.score_samples(data)
+        score = -self.model.score_samples(data)
         return score
