@@ -14,7 +14,11 @@ def infer_dtype(data):
         else:
             return 'continuous'
     else:
-        return 'discrete'
+        try:
+            pd.to_datetime(data)
+            return 'date'
+        except:
+            return 'discrete'
 
 def get_features(df):
     features = [{'feature': feature} for feature in df.columns]
@@ -37,11 +41,12 @@ def config(file, connect_string, table, models=[RobustCov, LOF, IsoForest]):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     df = pd.read_csv(f'{dir_path}/{file}')
     features_df = get_features(df)
-    projection_df = get_projection(df)
+    not_date = [col for col in df.columns if features_df.set_index('feature')['dtype'][col] != 'date']
+    projection_df = get_projection(df[not_date])
     for model in models:
         m = model()
-        m.fit(df)
-        score = m.score(df)
+        m.fit(df[not_date])
+        score = m.score(df[not_date])
         df[model.__name__.lower()] = score
     engine = create_engine(connect_string)
     df.to_sql(table, engine, if_exists='replace', index=False)
